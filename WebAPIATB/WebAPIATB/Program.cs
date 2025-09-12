@@ -9,8 +9,12 @@ builder.Services.AddDbContext<AppDbATBContext>(options =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 // Configure the HTTP request pipeline.
 
 app.UseAuthorization();
