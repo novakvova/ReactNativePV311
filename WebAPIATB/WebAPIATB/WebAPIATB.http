@@ -1,0 +1,6 @@
+@WebAPIATB_HostAddress = http://localhost:5285
+
+GET {{WebAPIATB_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

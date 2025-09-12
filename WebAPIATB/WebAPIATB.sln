@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36429.23 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPIATB", "WebAPIATB\WebAPIATB.csproj", "{3016E343-2D26-4F3B-9266-A7CC8CF8F853}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3016E343-2D26-4F3B-9266-A7CC8CF8F853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3016E343-2D26-4F3B-9266-A7CC8CF8F853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3016E343-2D26-4F3B-9266-A7CC8CF8F853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3016E343-2D26-4F3B-9266-A7CC8CF8F853}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9DB4D12-7B69-4A98-A5BF-324ECBFFD123}
+	EndGlobalSection
+EndGlobal
