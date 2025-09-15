@@ -6,7 +6,7 @@ networks:
 services:
   app:
     container_name: pv311-native-api-container
-    image: pv311-native-api
+    image: novakvova/pv311-native-api
     ports:
       - "5180:8080"  
     networks:
