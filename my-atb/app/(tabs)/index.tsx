@@ -1,10 +1,8 @@
-import {Image} from 'expo-image';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import { Image } from 'expo-image';
+import {  StyleSheet, FlatList, View, Text } from 'react-native';
 
-import {HelloWave} from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {ThemedText} from '@/components/ThemedText';
-import {ThemedView} from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {ICategoryItem} from "@/app/(tabs)/types";
@@ -25,54 +23,33 @@ export default function HomeScreen() {
                 console.log("Server problem", errors);
             });
     }, []);
-
+    const renderCategory = ({ item }: { item: ICategoryItem }) => (
+        <View style={styles.card}>
+            <Image
+                source={{ uri: `http://10.0.2.2:5285/images/200_${item.image}` }}
+                style={styles.image}
+            />
+            <Text style={styles.name}>{item.name}</Text>
+        </View>
+    );
     console.log("categories list", categories);
     return (
-        <ParallaxScrollView
-            headerBackgroundColor={{light: '#A1CEDC', dark: '#1D3D47'}}
-            headerImage={
-                <Image
-                    source={require('@/assets/images/partial-react-logo.png')}
-                    style={styles.reactLogo}
-                />
-            }>
-            <View className="flex-1 items-center justify-center bg-white">
-                <Text className="text-2xl font-bold text-red-700">
-                    Привіт командос!
-                </Text>
-            </View>
-            <ThemedView style={styles.stepContainer}>
-                <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-                <ThemedText>
-                    Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-                    Press{' '}
-                    <ThemedText type="defaultSemiBold">
-                        {Platform.select({
-                            ios: 'cmd + d',
-                            android: 'cmd + m',
-                            web: 'F12',
-                        })}
-                    </ThemedText>{' '}
-                    to open developer tools.
-                </ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.stepContainer}>
-                <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-                <ThemedText>
-                    {`Tap the Explore tab to learn more about what's included in this starter app.`}
-                </ThemedText>
-            </ThemedView>
-            <ThemedView style={styles.stepContainer}>
-                <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-                <ThemedText>
-                    {`When you're ready, run `}
-                    <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-                    <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-                    <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-                    <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-                </ThemedText>
-            </ThemedView>
-        </ParallaxScrollView>
+        <>
+
+            {/* тут відмальовуємо список */}
+            <FlatList
+                data={categories}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderCategory}
+                contentContainerStyle={styles.listContainer}
+                ListHeaderComponent={
+                    <ThemedView style={styles.titleContainer}>
+                        <ThemedText type="title">Категорії</ThemedText>
+
+                    </ThemedView>
+                }
+            />
+        </>
     );
 }
 
@@ -81,10 +58,30 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
+        marginBottom: 12,
     },
-    stepContainer: {
-        gap: 8,
-        marginBottom: 8,
+    listContainer: {
+        gap: 12,
+        paddingBottom: 20,
+        paddingTop: 64,        // відступ зверху
+        paddingHorizontal: 16, // відступ зліва і справа
+    },
+    card: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#eee',
+        padding: 10,
+        borderRadius: 12,
+    },
+    image: {
+        width: 60,
+        height: 60,
+        borderRadius: 8,
+        marginRight: 12,
+    },
+    name: {
+        fontSize: 18,
+        fontWeight: '600',
     },
     reactLogo: {
         height: 178,
@@ -94,3 +91,4 @@ const styles = StyleSheet.create({
         position: 'absolute',
     },
 });
+
