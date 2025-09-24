@@ -4,19 +4,44 @@ import {
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
-    Text,
-    View
+    Text, TouchableOpacity,
+    View,
+    Image
 } from "react-native";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import ScrollView = Animated.ScrollView;
 import FormField from "@/components/FormField";
 import {useState} from "react";
+import slugify from "slugify";
+import * as ImagePicker from 'expo-image-picker';
 
 export default function AddTabScreen() {
 
     const [form, setForm] = useState({
-        name: ""
+        name: "",
+        slug: ""
     });
+
+    const [image, setImage] = useState<string | null>(null);
+
+    const pickImage = async () => {
+        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permission.granted) {
+            alert("Потрібен доступ до галереї!");
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled && result.assets.length > 0) {
+            setImage(result.assets[0].uri);
+        }
+    };
 
     return (
         <SafeAreaProvider>
@@ -42,7 +67,31 @@ export default function AddTabScreen() {
 
                             <FormField
                                 title={"Назва"}
-                                value={form.name} />
+                                value={form.name}
+                                placeholder={"Назва категорії"}
+                                onChangeText={(text) => setForm({...form, name: text, slug: slugify(text, {lower: true})})}
+                            />
+
+                            <FormField
+                                title={"Slug"}
+                                value={form.slug}
+                                placeholder={"Slug категорії"}
+                                onChangeText={(text) => setForm({...form, slug: text})}
+                            />
+
+                            <TouchableOpacity
+                                onPress={pickImage}
+                                className="w-full bg-indigo-300 p-3 rounded-lg mt-4"
+                            >
+                                <Text className="text-center text-white font-bold">Обрати фото</Text>
+                            </TouchableOpacity>
+
+                            {image && (
+                                <Image
+                                    source={{ uri: image }}
+                                    style={{ width: 100, height: 100, borderRadius: 50, marginTop: 10 }}
+                                />
+                            )}
 
                         </View>
                     </ScrollView>
