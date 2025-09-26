@@ -5,7 +5,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {ICategoryItem} from "@/app/(tabs)/types";
+import {ICategoryItem} from "@/interfaces/category/ICategoryItem";
 
 export default function HomeScreen() {
 
