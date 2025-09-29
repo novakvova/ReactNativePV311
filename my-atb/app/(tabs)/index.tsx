@@ -6,23 +6,27 @@ import { ThemedView } from '@/components/ThemedView';
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {ICategoryItem} from "@/interfaces/category/ICategoryItem";
+import {useGetCategoriesQuery} from "@/services/categoryService";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function HomeScreen() {
 
-    const [categories, setCategories] = useState<ICategoryItem[]>([]);
+    // const [categories, setCategories] = useState<ICategoryItem[]>([]);
 
-    useEffect(() => {
-        // console.log("---Привіт! React native---");
-        const url = "http://10.0.2.2:5285/api/categories";
-        axios.get<ICategoryItem[]>(url)
-            .then(resp => {
-                // console.log("Server result", resp.data);
-                setCategories(resp.data);
-            })
-            .catch(errors => {
-                console.log("Server problem", errors);
-            });
-    }, []);
+    const {data: categories, isLoading} = useGetCategoriesQuery();
+    // useEffect(() => {
+    //     // console.log("---Привіт! React native---");
+    //     const url = "http://10.0.2.2:5285/api/categories";
+    //     axios.get<ICategoryItem[]>(url)
+    //         .then(resp => {
+    //             console.log("---Loading Categories---");
+    //             // console.log("Server result", resp.data);
+    //             setCategories(resp.data);
+    //         })
+    //         .catch(errors => {
+    //             console.log("Server problem", errors);
+    //         });
+    // }, []);
     const renderCategory = ({ item }: { item: ICategoryItem }) => (
         <View style={styles.card}>
             <Image
@@ -32,9 +36,10 @@ export default function HomeScreen() {
             <Text style={styles.name}>{item.name}</Text>
         </View>
     );
-    console.log("categories list", categories);
+    // console.log("categories list", categories);
     return (
         <>
+            <LoadingOverlay visible={isLoading} />
 
             {/* тут відмальовуємо список */}
             <FlatList
