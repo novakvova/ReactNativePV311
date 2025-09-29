@@ -14,6 +14,8 @@ import FormField from "@/components/FormField";
 import {useState} from "react";
 import slugify from "slugify";
 import * as ImagePicker from 'expo-image-picker';
+import {useCreateCategoryMutation} from "@/services/categoryService";
+import {router} from "expo-router";
 
 export default function AddTabScreen() {
 
@@ -42,7 +44,34 @@ export default function AddTabScreen() {
             setImage(result.assets[0].uri);
         }
     };
+    const [createCategory, {isLoading}]=useCreateCategoryMutation();
 
+    const addHadler= async()=>{
+        const formData = new FormData();
+        formData.append("Name", form.name);
+        formData.append("Slug", form.slug);
+
+
+        if (image) {
+            const filename = image.split('/').pop()!;
+            const match = /\.(\w+)$/.exec(filename);
+            const ext = match?.[1];
+            const mimeType = `image/${ext}`;
+
+            formData.append("ImageFile", {
+                uri: image,
+                name: filename,
+                type: mimeType,
+            } as any);
+        }
+        try {
+            const res = await createCategory(formData).unwrap();
+            console.log("Створено категорію", res);
+            router.replace("/");
+        } catch (error) {
+            console.error("Не створено", error);
+        }
+    }
     return (
         <SafeAreaProvider>
             <SafeAreaView className="flex-1">
@@ -92,7 +121,12 @@ export default function AddTabScreen() {
                                     style={{ width: 100, height: 100, borderRadius: 50, marginTop: 10 }}
                                 />
                             )}
-
+                            <TouchableOpacity
+                                onPress={addHadler}
+                                className="w-full bg-red-600 p-3 rounded-lg mt-4"
+                            >
+                                <Text className="text-center text-white font-bold">Додати</Text>
+                            </TouchableOpacity>
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>
