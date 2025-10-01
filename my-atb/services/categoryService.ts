@@ -16,6 +16,7 @@ export const categoryApi = createApi({
                     method: 'GET'
                 };
             },
+            providesTags: ["Categories"]
         }),
         createCategory: builder.mutation<ICategoryItem, FormData>({
             query: (formData) =>({

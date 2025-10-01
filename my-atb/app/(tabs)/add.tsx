@@ -16,6 +16,7 @@ import slugify from "slugify";
 import * as ImagePicker from 'expo-image-picker';
 import {useCreateCategoryMutation} from "@/services/categoryService";
 import {router} from "expo-router";
+import LoadingOverlay from "@/components/LoadingOverlay";
 
 export default function AddTabScreen() {
 
@@ -66,6 +67,11 @@ export default function AddTabScreen() {
         }
         try {
             const res = await createCategory(formData).unwrap();
+            setForm({
+               name: "",
+               slug: "",
+            });
+            setImage(null);
             console.log("Створено категорію", res);
             router.replace("/");
         } catch (error) {
@@ -90,6 +96,7 @@ export default function AddTabScreen() {
                                 minHeight: Dimensions.get("window").height - 100,
                             }}
                         >
+                            <LoadingOverlay visible={isLoading} />
                             <Text className={"text-3xl font-bold mb-6 text-black"}>
                                 Додати категорію
                             </Text>
