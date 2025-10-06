@@ -1,102 +1,36 @@
-import { Image } from 'expo-image';
-import {StyleSheet, FlatList, View, Text, TouchableOpacity} from 'react-native';
-
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import {useEffect, useState} from "react";
-import axios from "axios";
-import {ICategoryItem} from "@/interfaces/category/ICategoryItem";
+import {View, Text, ScrollView} from 'react-native';
 import {useGetCategoriesQuery} from "@/services/categoryService";
 import LoadingOverlay from "@/components/LoadingOverlay";
-import {router} from "expo-router";
+import CategoryCard from "@/components/CategoryCard";
+
 
 export default function HomeScreen() {
 
     const {data: categories, isLoading} = useGetCategoriesQuery();
 
-    const handleEdit = (itemId: number) => {
-        // тут можна зробити перехід на сторінку редагування
-        router.replace({
-            pathname: "/update",
-            params: { id: itemId },
-        });
-    };
+    const onRemoveItem = (id: number) => {
+        console.log("Remove item", id);
+    }
 
-    const renderCategory = ({ item }: { item: ICategoryItem }) => (
-        <View style={styles.card}>
-            <Image
-                source={{ uri: `http://10.0.2.2:5285/images/200_${item.image}` }}
-                style={styles.image}
-            />
-            <Text style={styles.name}>{item.name}</Text>
-            {/* кнопка Edit */}
-            <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id)}>
-                <Text style={styles.editText}>Edit</Text>
-            </TouchableOpacity>
-        </View>
-    );
     return (
         <>
             <LoadingOverlay visible={isLoading} />
 
-            {/* тут відмальовуємо список */}
-            <FlatList
-                data={categories}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={renderCategory}
-                contentContainerStyle={styles.listContainer}
-                ListHeaderComponent={
-                    <ThemedView style={styles.titleContainer}>
-                        <ThemedText type="title">Категорії</ThemedText>
+            <View className={"pt-20"}>
+                <Text className={"font-bold color-blue-800 text-3xl text-center"}>Категорії</Text>
+            </View>
 
-                    </ThemedView>
-                }
-            />
+            <View className={"flex-1"}>
+                <ScrollView className={"w-full"}>
+                    <View className={"w-[93%] self-center my-4 gap-4 flex-row flex-wrap justify-between"}>
+                        {categories?.map((category) =>
+                            <CategoryCard key={category.id} onDelete={onRemoveItem} category={category} />)}
+                    </View>
+                </ScrollView>
+            </View>
         </>
     );
 }
 
-const styles = StyleSheet.create({
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-        marginBottom: 12,
-    },
-    listContainer: {
-        gap: 12,
-        paddingBottom: 20,
-        paddingTop: 64,
-        paddingHorizontal: 16,
-    },
-    card: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: "space-between",
-        backgroundColor: '#eee',
-        padding: 10,
-        borderRadius: 12,
-    },
-    image: {
-        width: 60,
-        height: 60,
-        borderRadius: 8,
-        marginRight: 12,
-    },
-    name: {
-        fontSize: 18,
-        fontWeight: '600',
-        flex: 1,
-    },
-    editButton: {
-        backgroundColor: "#007AFF",
-        paddingVertical: 6,
-        paddingHorizontal: 12,
-        borderRadius: 8,
-    },
-    editText: {
-        color: "#fff",
-        fontWeight: "600",
-    },
-});
+
 
