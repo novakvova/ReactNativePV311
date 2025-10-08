@@ -12,4 +12,6 @@ public class AppDbATBContext : DbContext
     }
 
     public DbSet<CategoryEntity> Categories { get; set; } = null!;
+    public DbSet<ProductEntity> Products { get; set; } = null!;
+    public DbSet<ProductImageEntity> ProductImages { get; set; } = null!;
 }
