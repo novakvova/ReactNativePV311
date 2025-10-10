@@ -1,5 +1,5 @@
 import {ICategoryItem} from "@/interfaces/category/ICategoryItem";
-import {Image, View, Text, TouchableOpacity} from "react-native";
+import {Image, View, Text, TouchableOpacity, Pressable} from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import {router} from "expo-router";
 import {useState} from "react";
@@ -8,10 +8,11 @@ import {Confirmation} from "@/components/Confirmation";
 interface Props {
     category: ICategoryItem,
     onDelete: (id:number) => void,
+    onPress?: () => void;
 }
 
 
-const CategoryCard : React.FC<Props> = ({category, onDelete}) => {
+const CategoryCard : React.FC<Props> = ({category, onDelete, onPress}) => {
 
     const [viewModal, setViewModal] = useState<boolean>(false);
 
@@ -32,9 +33,11 @@ const CategoryCard : React.FC<Props> = ({category, onDelete}) => {
                     onConfirm={() => confirmDelete(category.id)}
                     onCancel={() => setViewModal(false)} />
 
-                <Image className="w-full aspect-[16/12]"
-                       resizeMode={"cover"}
-                       source={{uri: `http://10.0.2.2:5285/images/200_${category.image}`}} />
+                <Pressable onPress={onPress}>
+                    <Image className="w-full aspect-[16/12]"
+                           resizeMode={"cover"}
+                           source={{uri: `http://10.0.2.2:5285/images/200_${category.image}`}} />
+                </Pressable>
                 <View className='flex flex-row  justify-between'>
 
                     <TouchableOpacity className=' self-center mx-1' onPress={() => setViewModal(true)}>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Core.Interfaces;
 using Core.Models.Product;
 using Domain;
@@ -54,6 +55,16 @@ public class ProductService(AppDbATBContext atbContext,
     {
         var model = await mapper
             .ProjectTo<ProductItemModel>(atbContext.Products.Where(x => !x.IsDeleted))
+            .ToListAsync();
+        return model;
+    }
+
+    public async Task<List<ProductItemModel>> ListByCategory(int categoryId)
+    {
+        var query = atbContext.Products
+           .Where(x => !x.IsDeleted && x.CategoryId == categoryId);
+
+        var model = await mapper.ProjectTo<ProductItemModel>(query)
             .ToListAsync();
         return model;
     }

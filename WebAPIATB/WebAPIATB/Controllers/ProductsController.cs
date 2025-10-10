@@ -29,6 +29,14 @@ public class ProductsController(IProductService productService) : ControllerBase
         return Ok(model);
     }
 
+    [HttpGet("by-category/{categoryId:int}")]
+    public async Task<IActionResult> ListByCategory(int categoryId)
+    {
+
+        var model = await productService.ListByCategory(categoryId);
+        return Ok(model);
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] ProductCreateModel model)
     {
